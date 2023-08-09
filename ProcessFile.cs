@@ -31,9 +31,11 @@ namespace Vbu.ProcessFile
                 from system {sourceSystem} 
                 with internalId {internalId}");
             
-            var message = new DocumentProcessedMessage();
-            message.sourceSystem = sourceSystem;
-            message.internalId = internalId;
+            var message = new DocumentProcessedMessage() {
+                SourceSystem = sourceSystem,
+                InternalId = internalId,
+                Status = "Processed"
+            };
 
             string connection = Environment.GetEnvironmentVariable("ServiceBusConnectionString");
             ServiceBusClient client = new ServiceBusClient(connection);
@@ -41,7 +43,7 @@ namespace Vbu.ProcessFile
  
             var serializedMessage = JsonSerializer.Serialize(message);
             var serviceBusMessage = new ServiceBusMessage(serializedMessage);
-            serviceBusMessage.ApplicationProperties.Add("sourceSystem", message.sourceSystem);
+            serviceBusMessage.ApplicationProperties.Add("sourceSystem", message.SourceSystem);
 
             try
             {
@@ -60,8 +62,8 @@ namespace Vbu.ProcessFile
 
     public class DocumentProcessedMessage
     {
-        public string type;
-        public string sourceSystem;
-        public string internalId;
+        public string Status { get; set; }
+        public string SourceSystem { get; set; }
+        public string InternalId { get; set; }
     }
 }
