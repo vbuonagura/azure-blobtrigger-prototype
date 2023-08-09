@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace Vbu.FileUpload
 {
@@ -29,7 +31,13 @@ namespace Vbu.FileUpload
             var containerClient = new BlobContainerClient(connection, containerName);
             var blobClient = containerClient.GetBlobClient(file.FileName);
             
-            await blobClient.UploadAsync(myBlob);
+            var blobMetadata = new Dictionary<string, string>();
+            blobMetadata.Add("sourceSystem", req.Query["sourceSystem"]);
+            blobMetadata.Add("internalId", req.Query["internalId"]);
+
+            var options = new BlobUploadOptions() { Metadata = blobMetadata };
+
+            await blobClient.UploadAsync(myBlob, options);
             
             return new OkObjectResult("File successfully uploaded");
 
