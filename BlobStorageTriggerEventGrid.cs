@@ -47,6 +47,8 @@ namespace Vbu.BlobStorageTriggerEventGrid
                 var fileStreamContent = new StreamContent(myBlob);
                 fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
                 multipartFormContent.Add(fileStreamContent, name: "file", fileName: blobName);
+                multipartFormContent.Add(new StringContent(metaData["sourceSystem"]), name: "sourceSystem");
+	            multipartFormContent.Add(new StringContent(metaData["internalId"]), name: "internalId");
 
                 var client = new HttpClient();
                 var response = client.PostAsync("https://vbu-fileupload-app.azurewebsites.net/api/ProcessFile?", multipartFormContent).Result;
