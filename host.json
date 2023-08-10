@@ -11,5 +11,14 @@
   "concurrency": {
     "dynamicConcurrencyEnabled": true,
     "snapshotPersistenceEnabled": true
+  },
+  "extensions": {
+    "queues": {
+        "visibilityTimeout" : "00:00:15",
+        "maxDequeueCount": 7
+    },
+    "blobs": {
+      "maxDequeueCount": 3
+    }
   }
 }

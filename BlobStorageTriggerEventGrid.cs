@@ -13,14 +13,14 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-
+using Vbu.Models;
 
 namespace Vbu.BlobStorageTriggerEventGrid
 {
     public class BlobStorageTriggerEventGrid
     {
         [FunctionName("BlobStorageTriggerEventGrid")]
-        public void Run([BlobTrigger("vbu-doc/{blobname}.{blobextension}", Source = BlobTriggerSource.EventGrid, Connection = "AzureWebJobsStorage")]Stream myBlob, 
+        public async Task Run([BlobTrigger("vbu-doc/{blobname}.{blobextension}", Source = BlobTriggerSource.EventGrid, Connection = "AzureWebJobsStorage")]Stream myBlob, 
             string blobName,
             string blobExtension,
             string blobTrigger,
@@ -36,7 +36,16 @@ namespace Vbu.BlobStorageTriggerEventGrid
                 sourceSystem  {metaData["sourceSystem"]}
                 internalId    {metaData["internalId"]}");
 
-            if (blobName.Contains("pdf")) {
+            if (blobExtension.Contains("pdf")) {
+                var message = new DocumentProcessedMessage() {
+                    SourceSystem = metaData["sourceSystem"],
+                    InternalId = metaData["internalId"],
+                    Status = "Failed"
+                };
+
+                string connection = Environment.GetEnvironmentVariable("ServiceBusConnectionString");
+                await message.SendToServiceBus(connection);
+
                 throw new Exception("Invalid file format");
             }
 

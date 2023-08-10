@@ -6,9 +6,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
-using Azure.Messaging.ServiceBus;
-using Azure.Identity;
+using Vbu.Models;
 
 namespace Vbu.ProcessFile
 {
@@ -38,32 +36,9 @@ namespace Vbu.ProcessFile
             };
 
             string connection = Environment.GetEnvironmentVariable("ServiceBusConnectionString");
-            ServiceBusClient client = new ServiceBusClient(connection);
-            ServiceBusSender sender = client.CreateSender("document-processed");
- 
-            var serializedMessage = JsonSerializer.Serialize(message);
-            var serviceBusMessage = new ServiceBusMessage(serializedMessage);
-            serviceBusMessage.ApplicationProperties.Add("sourceSystem", message.SourceSystem);
-
-            try
-            {
-                await sender.SendMessageAsync(serviceBusMessage);
-                log.LogInformation($"Messagge {serializedMessage} successfully sent!");
-            }
-            finally
-            {
-                await sender.DisposeAsync();
-                await client.DisposeAsync();
-            }
+            await message.SendToServiceBus(connection);
 
             return new OkObjectResult($"File {file.FileName} successfully processed");
         }
-    }
-
-    public class DocumentProcessedMessage
-    {
-        public string Status { get; set; }
-        public string SourceSystem { get; set; }
-        public string InternalId { get; set; }
     }
 }
