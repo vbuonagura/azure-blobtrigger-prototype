@@ -44,7 +44,7 @@ namespace Vbu.BlobStorageTriggerEventGrid
                 };
 
                 string connection = Environment.GetEnvironmentVariable("ServiceBusConnectionString");
-                await message.SendToServiceBus(connection);
+                await message.SendToServiceBus(connection, "document-rejected");
 
                 throw new Exception("Invalid file format");
             }

@@ -36,7 +36,7 @@ namespace Vbu.ProcessFile
             };
 
             string connection = Environment.GetEnvironmentVariable("ServiceBusConnectionString");
-            await message.SendToServiceBus(connection);
+            await message.SendToServiceBus(connection, "document-processed");
 
             return new OkObjectResult($"File {file.FileName} successfully processed");
         }

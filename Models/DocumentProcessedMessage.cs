@@ -12,10 +12,10 @@ namespace Vbu.Models
         public string SourceSystem { get; set; }
         public string InternalId { get; set; }
 
-        public async Task SendToServiceBus(string connection)
+        public async Task SendToServiceBus(string connection, string topic)
         {
             ServiceBusClient client = new ServiceBusClient(connection);
-            ServiceBusSender sender = client.CreateSender("document-processed");
+            ServiceBusSender sender = client.CreateSender(topic);
  
             var serializedMessage = JsonSerializer.Serialize(this);
             var serviceBusMessage = new ServiceBusMessage(serializedMessage);
