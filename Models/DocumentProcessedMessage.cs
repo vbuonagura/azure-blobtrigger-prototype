@@ -10,7 +10,9 @@ namespace Vbu.Models
     {
         public string Status { get; set; }
         public string SourceSystem { get; set; }
+        public string DestinationSystem { get; set; }
         public string InternalId { get; set; }
+        public string Reason { get; set; }
 
         public async Task SendToServiceBus(string connection, string topic)
         {
@@ -20,6 +22,7 @@ namespace Vbu.Models
             var serializedMessage = JsonSerializer.Serialize(this);
             var serviceBusMessage = new ServiceBusMessage(serializedMessage);
             serviceBusMessage.ApplicationProperties.Add("sourceSystem", this.SourceSystem);
+            serviceBusMessage.ApplicationProperties.Add("destinationSystem", this.DestinationSystem);
 
             try
             {

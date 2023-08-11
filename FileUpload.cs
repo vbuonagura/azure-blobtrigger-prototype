@@ -22,7 +22,7 @@ namespace Vbu.FileUpload
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string connection = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+            string connection = Environment.GetEnvironmentVariable("StorageConnectionString");
             string containerName = Environment.GetEnvironmentVariable("ContainerName");
             
             Stream myBlob = new MemoryStream();
@@ -33,6 +33,7 @@ namespace Vbu.FileUpload
             
             var blobMetadata = new Dictionary<string, string>();
             blobMetadata.Add("sourceSystem", req.Query["sourceSystem"]);
+            blobMetadata.Add("destinationSystem", req.Query["destinationSystem"]);
             blobMetadata.Add("internalId", req.Query["internalId"]);
 
             var options = new BlobUploadOptions() { Metadata = blobMetadata };

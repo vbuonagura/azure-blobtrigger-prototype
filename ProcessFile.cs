@@ -23,6 +23,7 @@ namespace Vbu.ProcessFile
             memStream = file.OpenReadStream();
 
             var sourceSystem = req.Form["sourceSystem"];
+            var destinationSystem = req.Form["destinationSystem"];
             var internalId = req.Form["internalId"];
 
             log.LogInformation($@"Start processing file received 
@@ -31,6 +32,7 @@ namespace Vbu.ProcessFile
             
             var message = new DocumentProcessedMessage() {
                 SourceSystem = sourceSystem,
+                DestinationSystem = destinationSystem,
                 InternalId = internalId,
                 Status = "Processed"
             };
