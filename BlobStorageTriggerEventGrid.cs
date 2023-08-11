@@ -71,11 +71,13 @@ namespace Vbu.BlobStorageTriggerEventGrid
                     InternalId = internalId,
                     DestinationSystem = destinationSystem,
                     Status = "Failed",
-                    Reason = "Malware Detected"
+                    Reason = "Malware Detected. File has been deleted!"
                 };
 
                 string connection = Environment.GetEnvironmentVariable("ServiceBusConnectionString");
                 await message.SendToServiceBus(connection, "document-rejected");
+
+                await blobClient.DeleteAsync();
 
                 return;
             }
