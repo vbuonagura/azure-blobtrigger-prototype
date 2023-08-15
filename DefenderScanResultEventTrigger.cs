@@ -48,10 +48,22 @@ namespace Vbu.DefenderScanResultEventTrigger
             var verdict = eventData.GetProperty("scanResultType").GetString();
             var blobUriString = eventData.GetProperty("blobUri").GetString();
 
+            if (blobUriString.Contains("result-dlq")) {
+                log.LogInformation("No need to scan DLQ file event");
+                return;
+            }
+
             if (verdict == null || blobUriString == null)
             {
                 log.LogError("Event data doesn't contain 'verdict' or 'blobUri' fields");
                 throw new ArgumentException("Event data doesn't contain 'verdict' or 'blobUri' fields");
+            }
+
+            //Simulate an error
+            if (blobUriString.Contains("pdf"))
+            {
+                log.LogError("Wrong file");
+                throw new ArgumentException("Wrong file provided!");
             }
 
             var blobUri = new Uri(blobUriString);
