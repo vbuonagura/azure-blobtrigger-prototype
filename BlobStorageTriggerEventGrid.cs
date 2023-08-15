@@ -26,19 +26,19 @@ namespace Vbu.BlobStorageTriggerEventGrid
             string blobExtension,
             string blobTrigger,
             Uri uri,
-            IDictionary<string, string> metaData,
+            IDictionary<string, string> metadata,
             ILogger log)
         {
             string sourceSystem = "";
             string destinationSystem = "";
             string internalId = "";
-            if (!metaData.TryGetValue("sourceSystem", out sourceSystem))
+            if (!metadata.TryGetValue("sourceSystem", out sourceSystem))
                 sourceSystem = "";
 
-            if (!metaData.TryGetValue("destinationSystem", out destinationSystem))
+            if (!metadata.TryGetValue("destinationSystem", out destinationSystem))
                 destinationSystem = "";
 
-            if (!metaData.TryGetValue("internalId", out internalId))
+            if (!metadata.TryGetValue("internalId", out internalId))
                 internalId = "";
 
             log.LogInformation($@"
