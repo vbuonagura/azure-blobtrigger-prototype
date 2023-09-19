@@ -1,13 +1,13 @@
 ---
-- name: editique.claim.communication.v1
+- name: editique.claims.communication.v1
   topics:
-  - gw.claims-communication.v1
+  - gw.claims.communication.v1
 - name: gw.claims.communication.v1
   topics:
-  - tt.claims.communication.topic.v1
+  - tt.claims.communication.v1
 - name: optimex.claims.ServiceRequestInstruction.v1
   topics:
-  - gw.claims:ServiceRequestInstruction.v1
+  - gw.claims.ServiceRequestInstruction.v1
 - name: gw.claims.ServiceRequest.v1
   topics:
   - optimex.claims.ServiceRequest.v1
