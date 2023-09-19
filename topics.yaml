@@ -1,6 +1,6 @@
 ---
 - name: st.claims.invoice.v1
-- name: gw.claims-communication.v1
+- name: gw.claims.communication.v1
 - name: gw.claims.ServiceRequestInstruction.v1
 - name: optimex.claims.ServiceRequest.v1
 - name: optimex.claims.ServiceRequest.v1
